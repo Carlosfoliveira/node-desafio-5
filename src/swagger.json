@@ -119,7 +119,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": "string"
+                    "error": {
+                      "type": "string"
+                    }
                   }
                 },
                 "examples": {
