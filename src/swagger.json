@@ -1,0 +1,320 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Atlas",
+    "description": "Essa é uma documentação sobre a Atlas API",
+    "version": "1.0.0",
+    "contact": {
+      "email": "carlos.fe.oliveira@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Gerenciamento de usuários",
+        "description": "Cria um novo usuário.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "Rocketseat",
+                  "email": "oi@rocketseat.com.br"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Operaçao realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "examples": {
+                  "UserExample": {
+                    "$ref": "#/components/examples/UserExample"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email já está sendo utilizado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "This email is already in use."
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Retorna todos os usuários",
+        "description": "Somente usuário admin pode acessar",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "user_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }                  
+                },
+                "examples": {
+                  "UsersExample": {
+                    "$ref": "#/components/examples/UsersExample"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Usuário sem permissão ou Usuário não encontrado",
+            "content": {
+              "application/json":  {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "string"
+                  }
+                },
+                "examples": {
+                  "User is not admin": {
+                    "value": {
+                      "error": "User is not admin"
+                    }
+                  },
+                  "User does not exists": {
+                    "value": {
+                      "error": "User does not exists"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Retorna um usuário específico",
+        "description": "Retorna um usuário específico",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operaçao realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "examples": {
+                  "UserExample": {
+                    "$ref": "#/components/examples/UserExample"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "User does not exists"
+                }
+              }
+            }
+          }
+        }
+      }      
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Torna admin um usuário.",
+        "description": "Torna admin um usuário.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operaçao realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "examples": {
+                  "UserExample": {
+                    "$ref": "#/components/examples/UserExample"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "User does not exists"
+                }
+              }
+            }
+          }
+        }
+      }      
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "admin": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "examples": {
+      "UserExample": {
+        "value": {
+          "id": "3c9adaa9-8de4-47d1-8788-4f8b336f741c",
+          "admin": false,
+          "name": "Rocketseat",
+          "email": "oi@rocketseat.com.br",
+          "created_at": "2021-03-10T22:10:32.992Z",
+          "updated_at": "2021-03-10T22:10:32.992Z"
+        }
+      },
+      "UsersExample": {
+        "value": [
+          {
+            "id": "3c9adaa9-8de4-47d1-8788-4f8b336f741c",
+            "admin": false,
+            "name": "Rocketseat",
+            "email": "oi@rocketseat.com.br",
+            "created_at": "2021-03-10T22:10:32.992Z",
+            "updated_at": "2021-03-10T22:10:32.992Z"
+          },
+          {
+            "id": "2e930901-cb97-403a-a7ac-c48d859ba188",
+            "admin": true,
+            "name": "Carlos",
+            "email": "carlos@rocketseat.com.br",
+            "created_at": "2021-03-22T15:10:32.992Z",
+            "updated_at": "2021-03-22T15:10:32.992Z"
+          }
+        ]    
+      }
+    }
+  }
+}
